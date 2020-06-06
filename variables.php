@@ -32,8 +32,6 @@
  //echo gettype($alturaPersona);
 
 
-
-
  
 
 
