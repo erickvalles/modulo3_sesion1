@@ -1,6 +1,8 @@
 <?php
-include "conexion.php";
-include "../categorias/categorias.php";
+include_once "pags/conexion.php";
+include_once "categorias/categorias.php";
+include_once "productos/productos.php";
+$id_categoria = $_GET['id_categoria'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,10 +17,10 @@ include "../categorias/categorias.php";
   <title>Shop Homepage - Start Bootstrap Template</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
-  <link href="../css/shop-homepage.css" rel="stylesheet">
+  <link href="css/shop-homepage.css" rel="stylesheet">
 
 </head>
 
@@ -34,8 +36,7 @@ include "../categorias/categorias.php";
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="../index.php">Inicio
-              
+            <a class="nav-link" href="index.php">Inicio
             </a>
           </li>
           <li class="nav-item">
@@ -44,10 +45,14 @@ include "../categorias/categorias.php";
           <li class="nav-item">
             <a class="nav-link" href="#">Servicios</a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="contacto.php">Contacto
-            <span class="sr-only">(current)</span>
-            </a>
+          <li class="nav-item">
+            <a class="nav-link" href="pags/contacto.php">Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="categorias/gestionar_categorias.php">Categorías</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="productos/gestionar_productos.php">Productos</a>
           </li>
         </ul>
       </div>
@@ -65,7 +70,8 @@ include "../categorias/categorias.php";
         <div class="list-group">
           <?php
             
-            menu_categorias(true,$conexion);
+            menu_categorias(false,$conexion);
+            
 
           ?>
           
@@ -84,9 +90,14 @@ include "../categorias/categorias.php";
           </ol>
           <div class="carousel-inner" role="listbox">
             <div class="carousel-item active">
-              <img class="d-block img-fluid" src="http://lorempixel.com/900/350/cats/" alt="First slide">
+              <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide">
             </div>
-            
+            <div class="carousel-item">
+              <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Third slide">
+            </div>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -100,44 +111,14 @@ include "../categorias/categorias.php";
 
         <div class="row">
 
-          
+        <?php
+        $productos = getProductosPorCategoria($id_categoria,$conexion);
 
-          
+          foreach($productos as $producto){
+            llenar_tarjeta($producto["nombre"],$producto["precio"],$producto["descripcion"]);
+          }
 
-          <div class="col-lg-12 col-md-6 mb-4">
-            <div class="card h-100">
-              
-              
-            <div class="card-body">
-                <h4 class="card-title">
-                <h3>Formulario de contacto</h3>
-                </h4>
-                
-                <form action="procesa_formulario.php" method="post">
-                  <div class="form-group">
-                    <label for="correo">Correo electrónico</label>
-                    <input type="email" class="form-control" id="correo" name="correo" aria-describedby="emailHelp" placeholder="Ingresa tu correo">
-                    <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu información con nadie.</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Escribe tu nombre">
-                  </div>
-                  <div class="form-group">
-                    <label for="pregunta">Escribe tus dudas</label>
-                    <textarea class="form-control" id="pregunta" name="pregunta" rows="3"></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary btn-block">Enviar datos</button>
-                </form>    
-
-            </div>
-
-
-              <div class="card-footer">
-                Gracias por contactarnos
-              </div>
-            </div>
-          </div>
+        ?>
 
         </div>
         <!-- /.row -->

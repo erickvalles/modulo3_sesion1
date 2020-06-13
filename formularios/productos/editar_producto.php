@@ -1,6 +1,10 @@
 <?php
-include "conexion.php";
-include "../categorias/categorias.php";
+include_once("../pags/conexion.php");
+include_once("../categorias/categorias.php");
+include_once("productos.php");
+
+$producto = getProducto($_GET['id'],$conexion);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,8 +48,16 @@ include "../categorias/categorias.php";
           <li class="nav-item">
             <a class="nav-link" href="#">Servicios</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../pags/contacto.php">Contacto
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="crear_categorias.php">Categorías
+            </a>
+          </li>
           <li class="nav-item active">
-            <a class="nav-link" href="contacto.php">Contacto
+            <a class="nav-link" href="crear_productos.php">Productos
             <span class="sr-only">(current)</span>
             </a>
           </li>
@@ -110,31 +122,50 @@ include "../categorias/categorias.php";
               
             <div class="card-body">
                 <h4 class="card-title">
-                <h3>Formulario de contacto</h3>
+                <h3>Editar un producto</h3>
                 </h4>
                 
-                <form action="procesa_formulario.php" method="post">
-                  <div class="form-group">
-                    <label for="correo">Correo electrónico</label>
-                    <input type="email" class="form-control" id="correo" name="correo" aria-describedby="emailHelp" placeholder="Ingresa tu correo">
-                    <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu información con nadie.</small>
-                  </div>
+                <form action="modificar_producto.php" method="post">
+                 <input type="hidden" name="id" value="<?php echo $producto->id; ?>">
                   <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Escribe tu nombre">
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $producto->nombre; ?>">
                   </div>
                   <div class="form-group">
-                    <label for="pregunta">Escribe tus dudas</label>
-                    <textarea class="form-control" id="pregunta" name="pregunta" rows="3"></textarea>
+                    <label for="pregunta">Descripción del producto</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><?php echo $producto->descripcion; ?>
+                    </textarea>
                   </div>
-                  <button type="submit" class="btn btn-primary btn-block">Enviar datos</button>
+                  <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="text" class="form-control" id="precio" name="precio" value="<?php echo $producto->precio; ?>" placeholder="Escribe el precio del producto">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="precio">Categoría:</label>
+                    <select class="form-control" id="categoria" name="categoria">
+                      <option value="0">Seleccione a qué categoría pertenece...</option>
+                      <?php
+                          $categorias = getCategorias($conexion);
+                          foreach($categorias as $categoria){
+                            if($categoria['id']==$producto->categorias_id){
+                              echo '<option value="'.$categoria['id'].'" selected>'.$categoria['nombre'].'</option>';
+                            }else{
+                              echo '<option value="'.$categoria['id'].'">'.$categoria['nombre'].'</option>';
+                            }
+                            
+                          }
+                      ?>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Guardar producto</button>
                 </form>    
 
             </div>
 
 
               <div class="card-footer">
-                Gracias por contactarnos
+                <a href="gestionar_productos.php">Ir a gestionar los productos</a>
               </div>
             </div>
           </div>

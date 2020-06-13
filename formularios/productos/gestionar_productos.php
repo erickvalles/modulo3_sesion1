@@ -1,6 +1,7 @@
 <?php
-include "conexion.php";
-include "../categorias/categorias.php";
+include "../pags/conexion.php";
+include_once("../categorias/categorias.php");
+include "productos.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,8 +45,12 @@ include "../categorias/categorias.php";
           <li class="nav-item">
             <a class="nav-link" href="#">Servicios</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../pags/contacto.php">Contacto
+            </a>
+          </li>
           <li class="nav-item active">
-            <a class="nav-link" href="contacto.php">Contacto
+            <a class="nav-link" href="crear_categorias.php">Categorías
             <span class="sr-only">(current)</span>
             </a>
           </li>
@@ -110,31 +115,22 @@ include "../categorias/categorias.php";
               
             <div class="card-body">
                 <h4 class="card-title">
-                <h3>Formulario de contacto</h3>
+                <h3>Gestionar Productos</h3>
                 </h4>
                 
-                <form action="procesa_formulario.php" method="post">
-                  <div class="form-group">
-                    <label for="correo">Correo electrónico</label>
-                    <input type="email" class="form-control" id="correo" name="correo" aria-describedby="emailHelp" placeholder="Ingresa tu correo">
-                    <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu información con nadie.</small>
-                  </div>
-                  <div class="form-group">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Escribe tu nombre">
-                  </div>
-                  <div class="form-group">
-                    <label for="pregunta">Escribe tus dudas</label>
-                    <textarea class="form-control" id="pregunta" name="pregunta" rows="3"></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary btn-block">Enviar datos</button>
-                </form>    
+                <?php
+                  if(isset($_SESSION['producto_creado'])){
+                    echo "<div class='alert alert-success'>".$_SESSION['producto_creado']."</div>";
+                    session_unset();
+                  }
+                  tabla_productos($conexion);
+                ?>
 
             </div>
 
 
               <div class="card-footer">
-                Gracias por contactarnos
+                <a href="crear_productos.php">Agregar otro producto</a>
               </div>
             </div>
           </div>
@@ -163,6 +159,18 @@ include "../categorias/categorias.php";
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+
+  <script type="text/javascript">
+    function confirmacion(id){
+      var eleccion = confirm("¿Seguro que deseas eliminar?");
+      if(eleccion){
+        location.href = "eliminar_producto.php?id="+id;
+      }else{
+        console.log("no eliminamos nada");
+      }
+    }
+
+  </script>
 </body>
 
 </html>
